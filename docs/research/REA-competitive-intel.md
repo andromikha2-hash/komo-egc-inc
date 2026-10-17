@@ -93,6 +93,7 @@ Top individual factors [SEEN, Whitespark 2026]: #1 Map Pack = **primary GBP cate
 | Emails | **2** (`sarmd_x@yahoo.com` on the old site, `sarmadkomo@gmail.com` on Facebook listings) | [SEEN] |
 | Domains | **2** (`komo-egc-inc.com` on Google, `komoelectrical.ca` on Facebook). **Neither returned a crawlable page.** | [SEEN] / [INFERRED] neither site is live or indexable |
 | Facebook | 2 separate pages ("certified electrician #7015083", "Master Electrician") | [SEEN] |
+| Owner-provided Facebook page | https://www.facebook.com/p/KOMO-EGC-INC-certified-electrician-7015083-100083358471858/ (provided by the owner 2026-10-17). Page name carries licence #7015083. Facebook blocks automated reading, so its contents are unread. **Recommended canonical Facebook page**; merge or retire the "Master Electrician" page into it. | [SEEN] (URL) / [UNKNOWN] (contents) |
 | Directory "best of" lists | Not present on MSARCH, ProsGrade, ElectricianGrade, WowLocal, CommunityVotes | [SEEN] (absence in retrieved lists) |
 | WCA / WECA membership | Not in retrieved member lists | [SEEN] (absence) |
 | AI index | Not returned for commercial-contractor queries | [SEEN] |
