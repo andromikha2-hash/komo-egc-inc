@@ -211,17 +211,7 @@ table.matrix.wide { min-width: 860px; }
 .direct { display: grid; gap: 16px; align-content: start; }
 .direct .big { font-family: var(--display); font-size: clamp(2.4rem, 5vw, 3.4rem); line-height: 1; text-decoration: none; }
 .direct .big:hover { color: var(--blueline); }
-form.rfq { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; background: var(--panel); border: 2px solid var(--ink); padding: 22px; }
-form.rfq .full { grid-column: 1 / -1; }
-form.rfq label { display: grid; gap: 6px; font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); min-width: 0; }
-form.rfq input, form.rfq select, form.rfq textarea { font: inherit; font-family: var(--body); font-size: 1rem; text-transform: none; letter-spacing: 0; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); padding: 10px 12px; width: 100%; }
-form.rfq button { justify-self: start; font: inherit; font-weight: 700; background: var(--hazard); color: var(--on-hazard); border: 2px solid var(--ink); padding: 12px 20px; cursor: pointer; }
-form.rfq button:hover { background: var(--ink); color: var(--hazard); }
-form.rfq button[disabled] { opacity: 0.6; cursor: progress; }
-.form-status { grid-column: 1 / -1; font-size: 0.92rem; }
-.hp { position: absolute; left: -9999px; }
 @media (max-width: 860px) { .contact-grid { grid-template-columns: minmax(0, 1fr); } }
-@media (max-width: 480px) { form.rfq { grid-template-columns: minmax(0, 1fr); padding: 16px; } }
 
 /* Footer */
 .foot { background: var(--ink); color: var(--inverse-fg); margin-top: 0; }

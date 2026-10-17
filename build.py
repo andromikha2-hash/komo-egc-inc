@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Static site generator for Komo E.G.C Inc.
 
-Every business fact (name, phone, licence, email, domain) lives in BUSINESS
+Every business fact (name, phone, licence, domain) lives in BUSINESS
 below, so all pages, schema and listings stay identical. Run:
 
     python3 build.py
@@ -28,7 +28,6 @@ BUSINESS = {
     "phone_display": "647-767-7815",
     "phone_e164": "+16477677815",
     "phone_schema": "+1-647-767-7815",
-    "email": "sarmadkomo@gmail.com",
     "licence": "7015083",  # ECRA/ESA contractor licence. Confirm at the ESA lookup before launch.
     "city": "Windsor",
     "region": "ON",
@@ -40,8 +39,6 @@ BUSINESS = {
     "hours": None,
     # Google rating as shown on the Google listing. Update when it changes; set None to hide.
     "google_rating": {"value": "5.0", "count": 10},
-    # Intake endpoint from the previous site (Google Apps Script -> sheet). Test before launch.
-    "form_endpoint": "https://script.google.com/macros/s/AKfycbynmGbxKn0z6XBtkxpX0Qj4WSSFbRKZgE4NEQR9pB16aVMGkWOklCU0nuSgPweOQYnUgw/exec",
 }
 ESA_LOOKUP = "https://findacontractor.esasafe.com/Home/ContractorSearch"
 B = BUSINESS
@@ -312,7 +309,7 @@ SERVICE_PHOTOS = {
 
 GENERAL_FAQS = [
     ("Is Komo E.G.C Inc. a licensed electrical contractor in Ontario?", f"Yes. Komo E.G.C Inc. holds ECRA/ESA Electrical Contractor Licence #{LIC}. You can verify it on the Electrical Safety Authority's contractor lookup."),
-    ("Do you sub-contract to general contractors?", "Yes. We take electrical scopes from general contractors and project managers on commercial fit-outs, restaurants, retail, office and warehouse projects across Windsor-Essex. Send the drawings and schedule for a line-item price."),
+    ("Do you sub-contract to general contractors?", "Yes. We take electrical scopes from general contractors and project managers on commercial fit-outs, restaurants, retail, office and warehouse projects across Windsor-Essex. Call with the scope and schedule for a line-item price."),
     ("Do you work on 600V three-phase systems?", "Yes. We install and upgrade 347/600V three-phase services and distribution, including step-down transformers to 120/208V, machine feeds, motor controls and VFDs."),
     ("Which areas do you serve?", "Windsor, Tecumseh, LaSalle, Lakeshore, Amherstburg and Essex, plus the rest of Essex County, Ontario."),
     ("Who files the ESA notification and books inspections?", f"We do. Komo E.G.C Inc. files the ESA notification of work under licence #{LIC}, books inspections and hands over the Certificate of Acceptance at closeout."),
@@ -338,7 +335,6 @@ def business_node():
         "legalName": B["name"],
         "url": f"{URL}/",
         "telephone": B["phone_schema"],
-        "email": B["email"],
         "foundingDate": B["founded"],
         "founder": {"@type": "Person", "name": B["owner"]},
         "description": "ECRA/ESA-licensed electrical contractor sub-contracting to general contractors and serving businesses across Windsor-Essex County, Ontario: tenant fit-outs, 347/600V three-phase power, restaurant electrical, warehouse LED retrofits, machine hookups and service upgrades.",
@@ -483,7 +479,6 @@ def footer():
         <li>Licensed electrical contractor · ECRA/ESA #{LIC}</li>
         <li>Windsor, Ontario · Serving Essex County</li>
         <li><a href="tel:{B['phone_e164']}">{B['phone_display']}</a></li>
-        <li><a href="mailto:{B['email']}">{B['email']}</a></li>
       </ul>
     </div>
     <div><h2>Services</h2><ul>{svc}</ul></div>
@@ -493,7 +488,7 @@ def footer():
       <li><a href="/projects/">Projects</a></li>
       <li><a href="/faq/">FAQ</a></li>
       <li><a href="/about/">About</a></li>
-      <li><a href="/contact/">Request pricing</a></li>
+      <li><a href="/contact/">Contact</a></li>
       <li><a href="{ESA_LOOKUP}" rel="noopener" target="_blank">Verify our ESA licence</a></li>
       <li><a href="{B['facebook']}" rel="noopener" target="_blank">Facebook</a></li>
     </ul></div>
@@ -522,14 +517,13 @@ def faq_block(faqs, open_first=True):
     return f'<div class="faq">{"".join(out)}</div>'
 
 
-def cta_band(heading="Send the scope. Get a number."):
+def cta_band(heading="Call with the scope. Get a number."):
     return f"""<section class="sec band">
   <div class="wrap">
     <div class="sec-head">
       <div><p class="label">Request pricing</p><h2>{e(heading)}</h2></div>
       <div class="cta-row">
         <a class="call-btn" href="tel:{B['phone_e164']}">Call {B['phone_display']}</a>
-        <a class="btn-line" href="/contact/">Send drawings for pricing</a>
         <button class="copy-num" type="button" data-copy="{B['phone_display']}">Copy number</button>
       </div>
     </div>
@@ -652,7 +646,7 @@ def service_cards(slugs=None):
     ]
     if not slugs:
         # The full list is 7 scopes; an 8th "not listed" card fills a 4 x 2 grid.
-        cards.append(f'<a href="/contact/"><span class="label">Anything else</span><h3>Scope not listed?</h3><p>Send the drawings or call {B["phone_display"]}. If it is electrical and in Essex County, ask.</p><span class="more">Request pricing →</span></a>')
+        cards.append(f'<a href="/contact/"><span class="label">Anything else</span><h3>Scope not listed?</h3><p>Call {B["phone_display"]} with the scope. If it is electrical and in Essex County, ask.</p><span class="more">Contact →</span></a>')
     cols = {2: " c2", 4: " c4", 8: " c4"}.get(len(cards), "")
     return f'<div class="cards{cols}">' + "".join(cards) + "</div>"
 
@@ -679,12 +673,11 @@ def build_home():
       <p class="lede">{e(B['name'])} is an ECRA/ESA-licensed electrical contractor working for general contractors, project managers and business owners across Windsor-Essex. We take tenant fit-outs, restaurants, warehouses and 347/600V three-phase work from rough-in to Certificate of Acceptance.</p>
       <div class="cta-row">
         <a class="call-btn" href="tel:{B['phone_e164']}">Call {B['phone_display']}</a>
-        <a class="btn-line" href="/contact/">Send drawings for pricing</a>
         <button class="copy-num" type="button" data-copy="{B['phone_display']}">Copy number</button>
       </div>
       <div class="callout">
         <span class="label">General contractors</span>
-        <strong>Send your E-sheets and your schedule. You get a line-item electrical price and a crew plan built around your milestones.</strong>
+        <strong>Call with your scope and schedule. You get a line-item electrical price and a crew plan built around your milestones.</strong>
         <a href="/general-contractors/">How we work with GCs →</a>
       </div>
     </div>
@@ -722,13 +715,13 @@ def build_gc():
   <p class="label">For general contractors &amp; project managers</p>
   <h1>An electrical sub that keeps your job moving.</h1>
   <p class="lede">{e(B['name'])} takes electrical scopes from general contractors across Windsor-Essex: commercial fit-outs, restaurants, retail, offices and warehouses. Licensed, insured, and organized around your schedule.</p>
-  <div class="cta-row"><a class="call-btn" href="tel:{B['phone_e164']}">Call {B['phone_display']}</a><a class="btn-line" href="/contact/">Send drawings for pricing</a></div>
+  <div class="cta-row"><a class="call-btn" href="tel:{B['phone_e164']}">Call {B['phone_display']}</a></div>
 </div></section>
 {sec("What you get", "Schedule, code, inspections, pricing.", "Four things decide whether an electrical sub helps or hurts your job.", GC_COMMITMENTS + f'<div class="split"><div><h3>Every sub-contract includes</h3>{GC_INCLUDES}</div><div><h3>How a scope runs</h3>{GC_STEPS}</div></div>', cls="inverse")}
 {sec("Prequalification", "How to vet an electrical sub in Ontario.", "Five checks before you award an electrical scope. We meet all five.", vet_html + f'<p class="note"><a href="{ESA_LOOKUP}" rel="noopener" target="_blank">Check any contractor on ESA\'s licence lookup ↗</a></p>')}
 {sec("Scopes we take", "What we self-perform.", "Every scope below is installed by our crews, not re-subbed.", service_cards())}
-{sec("GC questions", "Before you send the drawings.", "", faq_block(gc_faqs))}
-{cta_band("Send the drawings. Get a line-item price.")}"""
+{sec("GC questions", "Before you call.", "", faq_block(gc_faqs))}
+{cta_band("Call with the scope. Get a line-item price.")}"""
     trail = [("Home", "/"), ("General Contractors", "/general-contractors/")]
     page("/general-contractors/", "Electrical Sub-Contractor for General Contractors, Windsor-Essex",
          f"Licensed electrical sub-contractor (ECRA/ESA #{LIC}) for general contractors in Windsor-Essex. ESA notifications, WSIB and insurance certificates, line-item pricing, schedule-driven crews.",
@@ -758,7 +751,7 @@ def build_services():
   <p class="label">{e(" · ".join(s["sectors"]))} · {e(s["system"])}</p>
   <h1>{e(s["h1"])}</h1>
   <p class="lede">{e(s["intro"])}</p>
-  <div class="cta-row"><a class="call-btn" href="tel:{B['phone_e164']}">Call {B['phone_display']}</a><a class="btn-line" href="/contact/">Request pricing</a></div>
+  <div class="cta-row"><a class="call-btn" href="tel:{B['phone_e164']}">Call {B['phone_display']}</a></div>
 </div></section>
 <section class="sec band"><div class="wrap two-col">
   <div class="prose">
@@ -776,7 +769,6 @@ def build_services():
     <p class="num">{e(s["system"])}</p>
     <p>Serving Windsor, Tecumseh, LaSalle, Lakeshore, Amherstburg and Essex.</p>
     <a class="call-btn" href="tel:{B['phone_e164']}">Call {B['phone_display']}</a>
-    <a class="btn-line" href="/contact/">Send drawings</a>
   </aside>
 </div></section>
 {sec("Questions", f"{e(s['name'])}: common questions.", "", faq_block(s["faqs"]))}
@@ -810,14 +802,14 @@ def build_towns():
         places = ", ".join(t["places"])
         faqs = [
             (f"Do you serve all of {t['name']}?", f"Yes. {B['name']} works throughout {t['name']}, including {places}."),
-            (f"Do you take commercial work in {t['name']}?", f"Yes. In {t['name']} we take {', '.join(SVC[s]['name'].lower() for s in t['focus'][:3])}, and more. Send the drawings or call {B['phone_display']}."),
+            (f"Do you take commercial work in {t['name']}?", f"Yes. In {t['name']} we take {', '.join(SVC[s]['name'].lower() for s in t['focus'][:3])}, and more. Call {B['phone_display']}."),
             (f"Who handles the ESA notification for a job in {t['name']}?", f"We do. Every job in {t['name']} is filed with ESA under licence #{LIC}, and we book the inspection."),
         ]
         body = f"""<section class="page-hero band"><div class="wrap">
   <p class="label">Service area · {t['name']}, Ontario</p>
   <h1>Electrician in {t['name']}, Ontario.</h1>
   <p class="lede">{e(t['intro'])}</p>
-  <div class="cta-row"><a class="call-btn" href="tel:{B['phone_e164']}">Call {B['phone_display']}</a><a class="btn-line" href="/contact/">Request pricing</a></div>
+  <div class="cta-row"><a class="call-btn" href="tel:{B['phone_e164']}">Call {B['phone_display']}</a></div>
 </div></section>
 <section class="sec band"><div class="wrap two-col">
   <div class="prose">
@@ -901,42 +893,29 @@ def build_about():
 
 def build_contact():
     trail = [("Home", "/"), ("Contact", "/contact/")]
-    svc_opts = "".join(f"<option>{e(s['name'])}</option>" for s in SERVICES) + "<option>Other</option>"
-    town_opts = "".join(f"<option>{t['name']}</option>" for t in TOWNS) + "<option>Elsewhere in Essex County</option>"
     body = f"""<section class="page-hero band"><div class="wrap">
-  <p class="label">Request pricing</p>
-  <h1>Send the scope. Get a number.</h1>
-  <p class="lede">Call for anything urgent. For pricing, send the scope below. Drawings help: mention them and we'll ask for the files.</p>
+  <p class="label">Contact</p>
+  <h1>Call with the scope. Get a number.</h1>
+  <p class="lede">The fastest way to reach {e(B['name'])} is by phone. Tell us the scope, the site and your schedule, and we'll set up a site walk or price it from your drawings.</p>
 </div></section>
 <section class="sec band flush"><div class="wrap contact-grid">
   <div class="direct">
     <p class="label">Call</p>
     <a class="big num" href="tel:{B['phone_e164']}">{B['phone_display']}</a>
-    <button class="copy-num" type="button" data-copy="{B['phone_display']}">Copy number</button>
-    <p class="label">Email</p>
-    <p><a href="mailto:{B['email']}">{B['email']}</a></p>
-    <p class="label">Service area</p>
-    <p>Windsor, Ontario · Tecumseh · LaSalle · Lakeshore · Amherstburg · Essex</p>
-    <p class="label">Licence</p>
-    <p>ECRA/ESA #{LIC} · <a href="{ESA_LOOKUP}" rel="noopener" target="_blank">verify</a></p>
+    <div class="cta-row"><a class="call-btn" href="tel:{B['phone_e164']}">Call now</a><button class="copy-num" type="button" data-copy="{B['phone_display']}">Copy number</button></div>
   </div>
-  <form class="rfq" id="rfq" data-endpoint="{e(B['form_endpoint'] or '')}" data-phone="{B['phone_display']}" novalidate>
-    <label for="f-name">Name<input id="f-name" name="name" autocomplete="name" required></label>
-    <label for="f-company">Company<input id="f-company" name="company" autocomplete="organization"></label>
-    <label for="f-phone">Phone<input id="f-phone" name="phone" type="tel" autocomplete="tel" required></label>
-    <label for="f-email">Email<input id="f-email" name="email" type="email" autocomplete="email"></label>
-    <label for="f-role">You are<select id="f-role" name="role"><option>General contractor</option><option>Project manager</option><option>Property manager</option><option>Business owner</option><option>Homeowner</option></select></label>
-    <label for="f-service">Scope<select id="f-service" name="service">{svc_opts}</select></label>
-    <label for="f-city">Site location<select id="f-city" name="city">{town_opts}</select></label>
-    <label for="f-start">Target start<input id="f-start" name="start" type="date"></label>
-    <label class="full" for="f-msg">Scope notes<textarea id="f-msg" name="message" rows="5" placeholder="Drawings available? Square footage, service size, milestones"></textarea></label>
-    <label class="hp" aria-hidden="true">Leave blank<input name="website" tabindex="-1" autocomplete="off"></label>
-    <button type="submit">Request pricing</button>
-    <p class="form-status" id="f-status" role="status"></p>
-  </form>
+  <aside class="titleblock">
+    <div class="tb-head"><strong>Before you call</strong><span class="label">Sheet E-002</span></div>
+    <dl>
+      <div class="full"><dt>Have ready</dt><dd>Site address, type of work, target start date, and whether drawings exist</dd></div>
+      <div class="full"><dt>ECRA/ESA contractor licence</dt><dd class="lic">#{LIC}</dd></div>
+      <div class="full"><dt>Service area</dt><dd>Windsor, Tecumseh, LaSalle, Lakeshore, Amherstburg, Essex</dd></div>
+    </dl>
+    <div class="tb-foot"><span class="label">{B['phone_display']}</span><a class="label" href="{ESA_LOOKUP}" rel="noopener" target="_blank">Verify licence ↗</a></div>
+  </aside>
 </div></section>"""
-    page("/contact/", "Request Electrical Pricing",
-         f"Request a line-item electrical quote from {B['name']}, ECRA/ESA #{LIC}. Call {B['phone_display']} or send your scope. Serving Windsor-Essex.",
+    page("/contact/", "Contact",
+         f"Call {B['name']} at {B['phone_display']} for electrical pricing in Windsor-Essex. ECRA/ESA licence #{LIC}.",
          body, [], active="/contact/", trail=trail)
 
 
@@ -989,7 +968,7 @@ def build_support_files():
     (OUT / "llms.txt").write_text(
         f"""# {B['name']}
 
-> {B['name']} is an ECRA/ESA-licensed electrical contractor (licence #{LIC}) based in Windsor, Ontario, Canada. It sub-contracts to general contractors and works for business owners and homeowners across Essex County: Windsor, Tecumseh, LaSalle, Lakeshore, Amherstburg and Essex. Phone {B['phone_display']}. Email {B['email']}.
+> {B['name']} is an ECRA/ESA-licensed electrical contractor (licence #{LIC}) based in Windsor, Ontario, Canada. It sub-contracts to general contractors and works for business owners and homeowners across Essex County: Windsor, Tecumseh, LaSalle, Lakeshore, Amherstburg and Essex. Phone {B['phone_display']}.
 
 Key facts:
 - Legal name: {B['name']}
