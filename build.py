@@ -28,15 +28,16 @@ BUSINESS = {
     "phone_display": "647-767-7815",
     "phone_e164": "+16477677815",
     "phone_schema": "+1-647-767-7815",
-    "licence": "7015083",  # ECRA/ESA contractor licence. Confirm at the ESA lookup before launch.
+    "licence": "7015083",  # ECRA/ESA contractor licence, verified by the owner on the ESA lookup.
     "city": "Windsor",
     "region": "ON",
     "founded": "2019-11-05",
     "owner": "Sarmad Komo",
     "facebook": "https://www.facebook.com/p/KOMO-EGC-INC-certified-electrician-7015083-100083358471858/",
-    # Real hours only. Leave None until confirmed; wrong hours hurt Maps ranking.
-    # Example: [("Mo-Fr", "07:00", "17:00")]
-    "hours": None,
+    # Real hours only; wrong hours hurt Maps ranking. Confirmed by owner: open 24/7.
+    # Format: [(list of days, opens, closes)]; set None to hide.
+    "hours": [(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], "00:00", "23:59")],
+    "hours_display": "Open 24/7",
     # Google rating as shown on the Google listing. Update when it changes; set None to hide.
     "google_rating": {"value": "5.0", "count": 10},
 }
@@ -311,6 +312,7 @@ GENERAL_FAQS = [
     ("Is Komo E.G.C Inc. a licensed electrical contractor in Ontario?", f"Yes. Komo E.G.C Inc. holds ECRA/ESA Electrical Contractor Licence #{LIC}. You can verify it on the Electrical Safety Authority's contractor lookup."),
     ("Do you sub-contract to general contractors?", "Yes. We take electrical scopes from general contractors and project managers on commercial fit-outs, restaurants, retail, office and warehouse projects across Windsor-Essex. Call with the scope and schedule for a line-item price."),
     ("Do you work on 600V three-phase systems?", "Yes. We install and upgrade 347/600V three-phase services and distribution, including step-down transformers to 120/208V, machine feeds, motor controls and VFDs."),
+    ("Are you available 24/7?", f"Yes. {B['name']} is open 24 hours a day, 7 days a week. Call {B['phone_display']} any time, day or night."),
     ("Which areas do you serve?", "Windsor, Tecumseh, LaSalle, Lakeshore, Amherstburg and Essex, plus the rest of Essex County, Ontario."),
     ("Who files the ESA notification and books inspections?", f"We do. Komo E.G.C Inc. files the ESA notification of work under licence #{LIC}, books inspections and hands over the Certificate of Acceptance at closeout."),
     ("Can you provide WSIB clearance and a certificate of insurance?", "Yes. We provide a WSIB clearance certificate and a certificate of insurance for your project file before mobilization."),
@@ -437,6 +439,7 @@ def strip():
   <div class="wrap">
     <span>ECRA/ESA Licence <b>#{LIC}</b> · <a href="{ESA_LOOKUP}" rel="noopener" target="_blank">verify</a></span>
     {rating}
+    <span><b>{B['hours_display']}</b></span>
     <span>WSIB clearance on request</span>
     <span>Windsor · Tecumseh · LaSalle · Lakeshore · Amherstburg · Essex</span>
   </div>
@@ -478,6 +481,7 @@ def footer():
         <li>{e(B['name'])}</li>
         <li>Licensed electrical contractor · ECRA/ESA #{LIC}</li>
         <li>Windsor, Ontario · Serving Essex County</li>
+        <li>{B['hours_display']}</li>
         <li><a href="tel:{B['phone_e164']}">{B['phone_display']}</a></li>
       </ul>
     </div>
@@ -907,6 +911,7 @@ def build_contact():
   <aside class="titleblock">
     <div class="tb-head"><strong>Before you call</strong><span class="label">Sheet E-002</span></div>
     <dl>
+      <div class="full"><dt>Hours</dt><dd>{B['hours_display']}, call any time</dd></div>
       <div class="full"><dt>Have ready</dt><dd>Site address, type of work, target start date, and whether drawings exist</dd></div>
       <div class="full"><dt>ECRA/ESA contractor licence</dt><dd class="lic">#{LIC}</dd></div>
       <div class="full"><dt>Service area</dt><dd>Windsor, Tecumseh, LaSalle, Lakeshore, Amherstburg, Essex</dd></div>

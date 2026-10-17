@@ -30,8 +30,8 @@ Every page carries JSON-LD: `Electrician` (with ECRA/ESA licence as `hasCredenti
 
 ## Before launch
 
-1. **Confirm licence #7015083** on the ESA lookup: https://findacontractor.esasafe.com/Home/ContractorSearch
-2. **Set real hours** in `BUSINESS["hours"]` (left blank on purpose; wrong hours hurt Maps ranking).
+1. Licence #7015083: verified by the owner on the ESA lookup.
+2. Hours: open 24/7 (`BUSINESS["hours"]`).
 3. **Contact is phone-only** (647-767-7815) by choice: no form, no email on the site.
 4. **Photos:** 15 real job photos are in `src/assets/img/` (made by `scripts/prep_photos.py`, metadata stripped). Captions and alt text are in `PHOTOS` in `build.py`. To add more, put them in the photo pack, add them to `PICKS` in the script and to `PHOTOS`, then rebuild.
 5. Deploy `site/` to a static host (Cloudflare Pages or Netlify, free) and point `komoelectrical.ca` at it.
