@@ -277,6 +277,39 @@ TOWNS = [
     },
 ]
 
+
+# ---------------------------------------------------------------------------
+# Job photos (real Komo projects, from the Facebook page). Files are made by
+# scripts/prep_photos.py: <key>-480.webp and <key>-900.webp, 3:4 portrait.
+# "w" is the real width of the larger file (originals top out at 720px).
+# Captions never name a client; in-progress shots say so.
+# ---------------------------------------------------------------------------
+PHOTOS = {
+    "bakery-fit-out": ("Bakery interior with pendant lights, display cases and a black-and-white checkered floor under an open white ceiling", "Bakery fit-out: pendant and display-case lighting", 900),
+    "restaurant-counter-lighting": ("Restaurant service counter with patterned tile, recessed lights and track lighting under a dark ceiling", "Restaurant counter: recessed and track lighting", 900),
+    "restaurant-dining-lighting": ("Restaurant dining room with decorative ceiling panels and lighting over the tables", "Restaurant dining-room lighting", 900),
+    "linear-ceiling-lighting": ("Wood-slat ceiling with linear LED strips above a reception counter, fit-out in progress", "Linear LED in a wood-slat ceiling (in progress)", 900),
+    "track-lighting-install": ("Track lights and recessed fixtures in a commercial unit ceiling, installation in progress", "Commercial unit: track and recessed lighting (in progress)", 900),
+    "exposed-conduit-lighting": ("Track lighting run on exposed conduit under an open black ceiling, installation in progress", "Track lighting on exposed conduit (in progress)", 900),
+    "chandelier-feature-lighting": ("Tall atrium ceiling with blue cove lighting, recessed lights and a spiral chandelier", "Feature lighting: cove, recessed and chandelier", 900),
+    "residential-recessed-lighting": ("Vaulted living-room ceiling with rows of recessed pot lights", "Residential pot lights in a vaulted ceiling", 900),
+    "electrician-at-work": ("Komo electrician on a ladder working at a wall-mounted panel, with conduit running down a block wall", "On site: panel and conduit work", 900),
+    "commercial-panel": ("Commercial breaker panel on a block wall with the cover off during installation", "Commercial panel installation", 900),
+    "distribution-panel": ("Distribution panel with a full row of breakers and conductors routed to the terminals", "Distribution panel", 720),
+    "fused-disconnect": ("Open three-pole fused disconnect switch with cartridge fuses and feeder conductors", "Fused disconnect switch", 720),
+    "control-panel": ("Open control panel with contactors, relays, terminal blocks and a controller board, neatly wired", "Control panel wiring", 900),
+    "motor-contactors": ("Enclosure with a row of motor contactors and their wiring, cover removed", "Motor contactor enclosure", 720),
+    "residential-panel": ("Residential breaker panel with new circuits terminated, mounted on a plywood backboard", "Residential panel install", 720),
+}
+SERVICE_PHOTOS = {
+    "commercial-tenant-fit-outs": "track-lighting-install",
+    "600v-three-phase-power": "fused-disconnect",
+    "restaurant-kitchen-electrical": "restaurant-counter-lighting",
+    "warehouse-led-lighting-retrofits": "exposed-conduit-lighting",
+    "machine-hookups-motor-controls": "motor-contactors",
+    "panel-service-upgrades": "distribution-panel",
+}
+
 GENERAL_FAQS = [
     ("Is Komo E.G.C Inc. a licensed electrical contractor in Ontario?", f"Yes. Komo E.G.C Inc. holds ECRA/ESA Electrical Contractor Licence #{LIC}. You can verify it on the Electrical Safety Authority's contractor lookup."),
     ("Do you sub-contract to general contractors?", "Yes. We take electrical scopes from general contractors and project managers on commercial fit-outs, restaurants, retail, office and warehouse projects across Windsor-Essex. Send the drawings and schedule for a line-item price."),
@@ -320,6 +353,7 @@ def business_node():
         },
         "knowsAbout": ["Ontario Electrical Safety Code"] + [s["name"] for s in SERVICES],
         "sameAs": [B["facebook"]],
+        "image": [f"{URL}/assets/img/{k}-900.webp" for k in ("electrician-at-work", "bakery-fit-out", "control-panel")],
         "hasOfferCatalog": {
             "@type": "OfferCatalog",
             "name": "Electrical contracting services",
@@ -361,6 +395,7 @@ NAV = [
     ("Services", "/services/"),
     ("General Contractors", "/general-contractors/"),
     ("Service Areas", "/service-areas/"),
+    ("Projects", "/projects/"),
     ("FAQ", "/faq/"),
     ("About", "/about/"),
     ("Contact", "/contact/"),
@@ -455,6 +490,7 @@ def footer():
     <div><h2>Service areas</h2><ul>{towns}</ul></div>
     <div><h2>Company</h2><ul>
       <li><a href="/general-contractors/">For general contractors</a></li>
+      <li><a href="/projects/">Projects</a></li>
       <li><a href="/faq/">FAQ</a></li>
       <li><a href="/about/">About</a></li>
       <li><a href="/contact/">Request pricing</a></li>
@@ -516,6 +552,20 @@ def page(path, title, desc, body, graph, active=None, trail=None):
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text("\n".join(parts), encoding="utf-8")
     PAGES.append(path)
+
+
+def photo(key, eager=False, sizes="(max-width: 860px) 50vw, 33vw"):
+    alt, cap, w = PHOTOS[key]
+    big = min(900, w)
+    load = 'fetchpriority="high"' if eager else 'loading="lazy"'
+    return (f'<figure class="photo"><img src="/assets/img/{key}-900.webp" '
+            f'srcset="/assets/img/{key}-480.webp 480w, /assets/img/{key}-900.webp {big}w" sizes="{sizes}" '
+            f'width="{big}" height="{round(big * 4 / 3)}" alt="{e(alt)}" {load} decoding="async">'
+            f'<figcaption>{e(cap)}</figcaption></figure>')
+
+
+def gallery(keys):
+    return '<div class="gallery">' + "".join(photo(k) for k in keys) + "</div>"
 
 
 PAGES = []
@@ -644,6 +694,7 @@ def build_home():
 {sec("For general contractors &amp; project managers", "Your schedule is the contract.", "An electrical sub that misses rough-in holds up insulation, drywall and every trade behind it. We plan crews against your milestones, show up when the board says, and close out with the paperwork in order.",
      GC_COMMITMENTS + f'<div class="split"><div><h3>Every sub-contract includes</h3>{GC_INCLUDES}</div><div><h3>How a scope runs</h3>{GC_STEPS}</div></div>', cls="inverse", hid="gc")}
 {sec("Technical capabilities", "What we install, at what voltage, and where.", "Commercial, industrial and residential scopes we self-perform across Windsor-Essex. Every scope is filed with ESA and inspected.", matrix(), hid="capabilities")}
+{sec("Recent work", "Real jobs, real panels.", "Fit-outs, lighting and panel work from recent Komo projects.", gallery(["bakery-fit-out", "restaurant-counter-lighting", "control-panel", "restaurant-dining-lighting", "electrician-at-work", "distribution-panel"]) + '<p class="note"><a href="/projects/">All projects →</a></p>', hid="work")}
 {sec("Service area · Essex County, Ontario", "Six municipalities, one crew list.", "Based in Windsor and dispatched to job sites across Essex County.", town_cards(), hid="areas")}
 {sec("Questions GCs and owners ask", "Straight answers.", "The details a GC needs for prequalification and an owner needs before signing.", faq_block(GENERAL_FAQS[:5]) + '<p class="note"><a href="/faq/">All questions →</a></p>', hid="faq")}
 {cta_band()}"""
@@ -719,6 +770,7 @@ def build_services():
     <p>Every {e(s["name"].lower())} job is filed with the Electrical Safety Authority under {e(B['name'])}'s contractor licence #{LIC}. We book the inspections and hand over the Certificate of Acceptance when the work passes.</p>
   </div>
   <aside class="aside-box">
+    {photo(SERVICE_PHOTOS[s["slug"]], sizes="(max-width: 900px) 100vw, 400px") if s["slug"] in SERVICE_PHOTOS else ""}
     <p class="label">Spec</p>
     <h2>{e(s["name"])}</h2>
     <p class="num">{e(s["system"])}</p>
@@ -817,6 +869,7 @@ def build_about():
 </div></section>
 <section class="sec band flush"><div class="wrap two-col">
   <div class="prose">
+    {photo("electrician-at-work", eager=True, sizes="(max-width: 900px) 100vw, 560px")}
     <h2>What we do</h2>
     <p>{e(B['name'])} installs and upgrades electrical systems for commercial, industrial and residential buildings: tenant fit-outs, restaurant kitchens, 347/600V three-phase power, machine hookups, warehouse LED retrofits, panel upgrades and generator transfer switches.</p>
     <p>Most of our work comes through general contractors and business owners who need the electrical scope done on schedule, filed with ESA and closed out with the paperwork in order.</p>
@@ -887,6 +940,27 @@ def build_contact():
          body, [], active="/contact/", trail=trail)
 
 
+def build_projects():
+    trail = [("Home", "/"), ("Projects", "/projects/")]
+    fitouts = ["bakery-fit-out", "restaurant-counter-lighting", "restaurant-dining-lighting", "linear-ceiling-lighting",
+               "track-lighting-install", "exposed-conduit-lighting", "chandelier-feature-lighting", "residential-recessed-lighting", "electrician-at-work"]
+    panels = ["commercial-panel", "distribution-panel", "fused-disconnect", "control-panel", "motor-contactors", "residential-panel"]
+    body = f"""<section class="page-hero band"><div class="wrap">
+  <p class="label">Projects</p>
+  <h1>Recent work.</h1>
+  <p class="lede">Photos from {e(B['name'])} jobs: restaurant and retail fit-outs, lighting installs, panels and control wiring. Some show work in progress, and the captions say so.</p>
+</div></section>
+{sec("Fit-outs and lighting", "Restaurants, retail and feature lighting.", "Commercial interiors from rough-in to finished space.", gallery(fitouts), cls="flush")}
+{sec("Panels and controls", "Distribution, disconnects and control wiring.", "Equipment close-ups, unretouched.", gallery(panels))}
+{cta_band()}"""
+    graph = [{"@type": "ImageGallery", "@id": f"{URL}/projects/#gallery", "name": f"{B['name']} recent work",
+              "about": {"@id": f"{URL}/#business"},
+              "image": [{"@type": "ImageObject", "contentUrl": f"{URL}/assets/img/{k}-900.webp", "caption": PHOTOS[k][1]} for k in fitouts + panels]}]
+    page("/projects/", "Recent Electrical Projects, Windsor-Essex",
+         f"Photos of recent {B['name']} electrical work: restaurant and retail fit-outs, lighting, panels, disconnects and control wiring.",
+         body, graph, active="/projects/", trail=trail)
+
+
 def build_404():
     body = f"""<section class="page-hero band"><div class="wrap">
   <p class="label">404</p>
@@ -954,6 +1028,7 @@ def main():
     build_gc()
     build_services()
     build_towns()
+    build_projects()
     build_faq()
     build_about()
     build_contact()

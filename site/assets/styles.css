@@ -193,7 +193,7 @@ table.matrix.wide { min-width: 860px; }
 .prose ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
 .two-col { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 48px; align-items: start; }
 @media (max-width: 900px) { .two-col { grid-template-columns: minmax(0, 1fr); gap: 32px; } }
-.aside-box { border: 2px solid var(--ink); background: var(--panel); padding: 18px; display: grid; gap: 12px; position: sticky; top: 90px; }
+.aside-box { border: 2px solid var(--ink); background: var(--panel); padding: 18px; display: grid; gap: 12px; }
 .aside-box h2 { font-size: 1.8rem; }
 @media (max-width: 900px) { .aside-box { position: static; } }
 
@@ -238,3 +238,10 @@ form.rfq button[disabled] { opacity: 0.6; cursor: progress; }
 @media (max-width: 480px) { .foot .wrap { grid-template-columns: minmax(0, 1fr); } }
 
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* Job photos: portrait 3:4 */
+.photo { margin: 0; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.photo img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border: 2px solid var(--ink); background: var(--rule); }
+.photo figcaption { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 20px; }
+@media (max-width: 860px) { .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 14px; } }
